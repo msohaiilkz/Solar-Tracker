@@ -1,0 +1,31 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "devices": {
+      "$deviceId": {
+        "live": {
+          ".read": true,
+          ".write": "auth != null"
+        },
+        "history": {
+          ".read": true,
+          ".write": "auth != null",
+          ".indexOn": ["ts"]
+        },
+        "control": {
+          ".read": "auth != null",
+          ".write": "auth != null",
+          "mode": { ".validate": "newData.val() === 'auto' || newData.val() === 'manual'" },
+          "target_az": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 360" },
+          "target_el": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 90" },
+          "estop": { ".validate": "newData.isBoolean()" },
+          "cmd_id": { ".validate": "newData.isNumber()" },
+          "updated_by": { ".validate": "newData.isString()" },
+          "updated_at": { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}
