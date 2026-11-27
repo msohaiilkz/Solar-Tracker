@@ -14,6 +14,8 @@ The website and the Firebase database are ready. The firmware only has to follow
 
 The database rules reject writes from devices that are not signed in, so the ESP32 must sign in with the device account.
 
+**Permissions:** the database only accepts readings from the device account (`device@sunflower.com`, or any account given the `device` role). That account can write `live` and `history` and read `control`, but cannot send commands. Readings are validated: telemetry values must be numbers (numeric strings are accepted), LDR values 0 to 4095, angles in a sensible range. Extra fields are allowed.
+
 ## 2. Database paths
 
 ```

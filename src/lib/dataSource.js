@@ -99,7 +99,9 @@ function firebaseSource(cfg, h) {
       if (u) {
         controlUnsub = fb.onValue(fb.child(base, "control"),
           s => h.onControl(s.val() || {}),
-          e => h.onError("Control read error: " + e.message));
+          e => h.onError(/permission/i.test(e.message)
+            ? "Signed in, but this account has no operator role, so it can watch but not control the panel. Ask the admin to add it under roles in Firebase."
+            : "Control read error: " + e.message));
       }
       h.onAuth(u ? { email: u.email } : null);
     }));

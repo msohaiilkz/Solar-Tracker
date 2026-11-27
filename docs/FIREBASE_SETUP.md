@@ -67,6 +67,29 @@ Ye rules ye karte hain:
 
 ---
 
+### Roles dena (zaroori)
+
+Security rules ab har account ka **role** dekhte hain. Sirf login hona kaafi nahi:
+
+| Role | Kya kar sakta hai |
+|---|---|
+| `operator` | Website se panel control (mode, arrows, presets, emergency stop) |
+| `device` | Readings likhna aur commands parhna. `device@sunflower.com` ko ye role khud mil jata hai |
+| koi role nahi | Sirf dekh sakta hai, kuch badal nahi sakta |
+
+**Naya operator banana:**
+1. Authentication → Users → **Add user** (email + password).
+2. Us user ki line mein **User UID** copy karein.
+3. Realtime Database → **Data** tab → root par **+** → key `roles` (pehli dafa) → us ke andar **+** → key = copy ki hui UID, value = `operator` → **Add**.
+
+Terminal se bhi ho sakta hai: `firebase database:set /roles/<UID> --data '"operator"'`
+
+> Website par signup ka button nahi hai, lekin Firebase API se koi khud account bana sakta hai. Role na hone ki wajah se woh kuch nahi kar sakta. Mazeed ehtiyat ke liye: Authentication → **Settings → User actions → "Enable create (sign-up)"** OFF kar dein.
+
+Rules ka test (emulator par, Java 21 chahiye): `npm run test:rules`
+
+---
+
 ## Step 4 — Website ko Firebase se jorna
 
 1. Left menu ke upar **⚙️ (gear) → Project settings → General** kholein.

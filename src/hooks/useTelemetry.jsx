@@ -82,7 +82,10 @@ export function TelemetryProvider({ cfg, children }) {
     return src.sendControl(patch)
       /* readings are arriving but the firmware never echoes ids: the write itself is the confirmation */
       .then(c => setCmd({ state: liveRef.current && !ackSupported.current && kind !== "demo" ? "saved" : "sent", id: c.cmd_id, label }))
-      .catch(e => setCmd({ state: "error", label, msg: e.message }));
+      .catch(e => setCmd({
+        state: "error", label,
+        msg: /permission/i.test(e.message) ? "this account is not an operator" : e.message
+      }));
   }, [kind]);
 
   const auth = useMemo(() => ({

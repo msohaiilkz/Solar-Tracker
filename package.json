@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "fake-device": "node tools/fake-device.mjs",
-    "deploy": "vite build && firebase deploy --only hosting,database"
+    "deploy": "vite build && firebase deploy --only hosting,database",
+    "test:rules": "firebase emulators:exec --only database --project demo-sunflower \"node tools/test-rules.mjs\""
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

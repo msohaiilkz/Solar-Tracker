@@ -157,11 +157,19 @@ The full contract for the hardware is in [`docs/HARDWARE_HANDOVER.md`](docs/HARD
 
 ### Security
 
-Firebase security rules ([`database.rules.json`](database.rules.json)) enforce the roles:
+Firebase security rules ([`database.rules.json`](database.rules.json)) enforce role-based access:
 
-- Anyone can **read** live readings and history, so the dashboard can be shared openly.
-- Only an authenticated account can **write** readings or commands.
-- Commands are validated: the mode must be `auto` or `manual`, azimuth 0–360°, tilt 0–90°, and unknown fields are rejected.
+| Who | Can | Cannot |
+| --- | --- | --- |
+| Anyone with the link | Read live readings and history | Write anything, read commands |
+| **Device** account | Write readings, read commands | Send commands |
+| **Operator** role | Send and read commands | Write readings |
+| A self-registered account with no role | Nothing beyond public reads | Control the panel or grant itself a role |
+
+- Roles live in a `roles/<uid>` node that only the Firebase console or CLI can write.
+- Readings are validated (numbers where numbers belong, angles and LDR values in range); commands are strictly validated and unknown fields are rejected.
+- Secrets stay out of the repository: `secrets.h` and `.env` files are ignored, and the fake device reads its password from the environment.
+- The rules are covered by 25 automated checks against the Firebase emulator: `npm run test:rules` (needs Java 21).
 
 ---
 
@@ -262,6 +270,7 @@ npm run deploy       # builds and publishes hosting and database rules
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run fake-device` | Simulated ESP32 that writes to Firebase |
+| `npm run test:rules` | Check the security rules on the Firebase emulator |
 | `npm run deploy` | Build and publish to Firebase Hosting |
 
 ---
